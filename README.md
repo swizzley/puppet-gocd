@@ -22,6 +22,7 @@ Fork changes include:
   * renames and moves user to /home/gocd from /var/go
   * New User type for creating users
   * Vagrantfile added to fast testing
+  * Linted for style guide
 
 ## Description
 

@@ -1,5 +1,5 @@
 # == Define: gocd::user
-
+#
 define gocd::user ($user = $title, $password = undef,) {
   validate_string($user)
 

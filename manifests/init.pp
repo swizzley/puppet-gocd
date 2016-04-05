@@ -1,5 +1,5 @@
 # = $gocd::params= $gocd::params Class: gocd
-
+#
 class gocd (
   $server              = undef,
   $package_ensure      = $gocd::params::package_ensure,
@@ -18,7 +18,7 @@ class gocd (
   $ssl_private_key     = $gocd::params::ssl_private_key,
   $ssl_ca_cert         = $gocd::params::ssl_ca_cert,
   $keystore_password   = $gocd::params::keystore_password,
-  $service_user        = $gocd::params::service_user,) inherits gocd::params {
+  $service_user        = $gocd::params::service_user,) inherits ::gocd::params {
   require ::git
 
   if $server == undef or $server == true {

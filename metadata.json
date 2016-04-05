@@ -1,6 +1,6 @@
 {
   "name": "swizzley88-gocd",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Dustin Morgan <morgan@aspendenver.org>",
   "summary": "Module for managing ThoughtWorks GoCD.",
   "license": "Apache-2.0",

@@ -1,7 +1,9 @@
 # Class gocd::params
+#
 class gocd::params {
   $manage_dependencies = true
   $manage_repository = true
+  $manage_epel = true
   $manage_user = true
   $package_ensure = 'latest'
   $service_ensure = 'running'
@@ -9,7 +11,7 @@ class gocd::params {
   $service_enable = true
   $manage_service = true
   $manage_package = true
-  $manage_firewall = true 
+  $manage_firewall = true
   $listen_port = 8153
   $listen_port_ssl = 8154
   $manage_certs = false

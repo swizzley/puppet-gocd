@@ -1,33 +1,38 @@
 # == Class: gocd::common
-
+#
 class gocd::common {
-  define service_account ($user, $group, $home, $comment) {
-    if $title != 'service_account' {
-      fail('Only 1 service account allowed')
-    }
-    user { $user:
-      ensure  => present,
-      comment => $comment,
-      home    => $home,
-      system  => true,
-    } ->
-    file { $home:
-      ensure => directory,
-      mode   => '0755',
-      owner  => $user,
-      group  => $group,
-    }
-  }
-
   if $gocd::manage_dependencies {
-    contain '::gocd::common::dependencies'
+    $comment = 'ThoughtWorks GoCD YUM Repository'
+    $fingerprint = '9A439A18CBD07C3FF81BCE759149B0A6173454C7'
+    $location = 'http://dl.bintray.com/gocd/gocd-rpm'
+    $gpg_key_url = undef
+
+    # Lookup the RPM key from the MIT PGP key server automatically.
+    $default = 'https://pgp.mit.edu/pks/lookup?op=get&options=mr&search=0x%s'
+
+    # Use the specified key URL, or construct one from the fingerprint.
+    $gpgkey = pick($gpg_key_url, sprintf($default, $fingerprint))
+
+    package { 'nss': ensure => 'latest' } ->
+    class { '::java': before => Package[$gocd::package_name] }
   }
 
   if $gocd::manage_repository {
-    contain '::gocd::common::repository'
+    if $gocd::manage_epel {
+      include ::epel
+    }
+
+    yumrepo { 'thoughtworks-gocd':
+      ensure   => present,
+      baseurl  => $location,
+      descr    => $comment,
+      gpgkey   => $gpgkey,
+      gpgcheck => '0',
+      enabled  => '1',
+    }
   }
 
   if $gocd::manage_user {
-    create_resources('service_account', $gocd::service_user)
+    create_resources('gocd::service_account', $gocd::service_user)
   }
 }
