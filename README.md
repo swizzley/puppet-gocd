@@ -28,17 +28,17 @@ Fork changes include:
 
 For a server: 
 ```
-class { '::gocd': server => true, }
+include ::gocd
 ``` 
 
-For agents you must specify the server to use like this:
+For agents you must specify the server to use like this, or edit params if you only have 1 gocd instance:
 ```
 class { '::gocd': server => '172.16.2.101', }
 ```
 
 ## Configuration
 
-This module installs the openjdk appropriate, but can be used in conjunction with oracle jdk using the puppetlabs-java  module, but you will need to edit ::gocd::common::dependencies to do that. GoCD also uses a bunch of java deprecated ssl cyphers as of version Java 1.7p79 so the package ```nss``` requires an upgrade to the latest work-around this, which is handled in this module.
+This module installs the openjdk appropriate, but can be used in conjunction with oracle jdk using the puppetlabs-java  module, but you will need to edit ::gocd::common to do that. GoCD also uses a bunch of java deprecated ssl cyphers as of version Java 1.7p79 so the package ```nss``` requires an upgrade to the latest work-around this, which is handled in this module.
 
 The server install is currently a bare minimum setup, it does not configure pipelines, environments, repositories, plugins or OAUTH, currently this must be done from the GUI or extend the module at will, see [TODO](#development).
 
