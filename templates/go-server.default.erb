@@ -1,0 +1,5 @@
+export JAVA_HOME="$(readlink -f $(type -p java) | sed -e 's:/bin/java::')"
+export GO_SERVER_SSL_PORT="<%= scope['::gocd::listen_port_ssl'] %>"
+export GO_SERVER_PORT="<%= scope['::gocd::listen_port'] %>"
+export SERVER_WORK_DIR="<%= scope['::gocd::work_dir'] %>"
+export DAEMON=Y

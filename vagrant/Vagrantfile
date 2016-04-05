@@ -1,0 +1,47 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "swizzley88/centos-7.0_puppet-3.8"
+
+        go_port = {
+        'gosvr-vg-v1d.vagrant' => 8153,
+        'gotest-vg-v1d.vagrant' => 8152
+        }
+        go_ssl_port = {
+        'gosvr-vg-v1d.vagrant' => 8154,
+        'gotest-vg-v1d.vagrant' => 8151
+        }
+        ssh_port = {
+        'gosvr-vg-v1d.vagrant' => 2200,
+        'gotest-vg-v1d.vagrant' => 2205
+        }
+        go_ips = {
+        'gosvr-vg-v1d.vagrant' => '172.16.2.101',
+        'gotest-vg-v1d.vagrant' => '172.16.2.102',
+        }
+
+        go_ips.each do |name, ip|
+                config.vm.define name do |go|
+                        go.vm.host_name = "#{name}"
+                        go.vm.network :forwarded_port, guest: 22, host: ssh_port[name], auto_correct: true
+                        go.vm.network :forwarded_port, guest: 8153, host: go_port[name], auto_correct: true
+                        go.vm.network :forwarded_port, guest: 8154, host: go_ssl_port[name], auto_correct: true
+                        go.vm.network :private_network, ip: "#{ip}"
+			#go.vm.synced_folder "../../..//hiera", "/vagrant", disabled: false
+                config.vm.provider "virtualbox" do |vmem|
+                        vmem.customize ["modifyvm", :id, "--memory", 2048]
+                end
+                config.vm.provision "puppet" do |pup|
+					#pup.hiera_config_path = "../../../hiera/vagrant.yaml"
+					#pup.working_directory = "/vagrant"
+					pup.manifests_path = "../../../manifests"
+					pup.manifest_file = "site.pp"
+					pup.module_path = "../../../"
+					pup.options = "--verbose --debug --parser future"
+					pup.facter = {
+                        #"org" => 'swizzley',
+                        #"role" => 'gocd',
+                        #"server" => '172.16.2.101'
+                    }
+                end
+        end
+  end
+end
